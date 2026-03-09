@@ -1,15 +1,16 @@
+import argparse
 import time
 from stable_baselines3 import PPO
 from env import PaddleEnv
 import pygame
 
-def watch():
-    print("Loading trained model...")
+def watch(model_path):
+    print(f"Loading trained model: {model_path}.zip...")
     # Initialize env explicitly with human render mode
     env = PaddleEnv(render_mode="human")
     
     try:
-        model = PPO.load("best_model", env=env)
+        model = PPO.load(model_path, env=env)
     except Exception as e:
         print(f"Error loading model: {e}")
         return
@@ -35,4 +36,7 @@ def watch():
     pygame.quit()
 
 if __name__ == "__main__":
-    watch()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", type=str, default="best_model", help="Name of the model to load (e.g. best_model, baseline_model)")
+    args = parser.parse_args()
+    watch(args.model)
