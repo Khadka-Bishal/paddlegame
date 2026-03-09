@@ -112,6 +112,10 @@ class PaddleEnv(gym.Env):
         y_dist = abs(self.paddle_y - self.ball_y)
         reward += 0.05 * (0.5 - y_dist)
         
+        # Reward tightly tracking the ball (reduces jitter)
+        if y_dist < 0.1:
+            reward += 0.05
+            
         if self.current_step >= self.max_steps:
             truncated = True
             
