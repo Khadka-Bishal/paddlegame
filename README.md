@@ -24,6 +24,18 @@ By pointing an LLM coding agent at `program.md`, it successfully optimized the s
 
 ## GamePlay
 
+**Base Modal**
+
+https://github.com/user-attachments/assets/b780d251-e9b5-4c87-a09d-a41cda4ec6ab
+
+**Modal Optimized by LLM**
+
+
+https://github.com/user-attachments/assets/20be02df-337e-49f1-b747-ef7051caf1d9
+
+
+
+
 ## Why does the game stop when it's doing well?
 
 If you watch the best model play, you'll see episodes end seemingly abruptly—even when the AI is perfectly tracking the ball! 
