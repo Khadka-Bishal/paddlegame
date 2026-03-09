@@ -6,7 +6,7 @@ import time
 def run_experiment():
     print("Running custom paddle environment baseline experiment...")
     
-    # 1. Train the agent
+    # Train the agent
     print("\n--- Training ---")
     start_time = time.time()
     train_result = subprocess.run(
@@ -22,7 +22,7 @@ def run_experiment():
         
     print(f"Training completed in {train_time:.1f}s")
     
-    # 2. Evaluate the agent
+    # Evaluate the agent
     print("\n--- Evaluation ---")
     score_result = subprocess.run(
         ["uv", "run", "python", "score.py", "--episodes", "50"],
@@ -33,8 +33,8 @@ def run_experiment():
     if score_result.returncode != 0:
         print(f"Evaluation failed:\n{score_result.stderr}")
         return
-        
-    # 3. Parse and log results
+            
+    # Parse and log results
     score = None
     std = None
     for line in score_result.stdout.split('\n'):

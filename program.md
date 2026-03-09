@@ -1,24 +1,32 @@
-You are an expert AI researcher tasked with optimizing a custom Reinforcement Learning environment and hyperparameter configuration to achieve the highest possible score.
+# AI Agent Meta-Program for RL Optimization
 
-The environment is a continuous 2D paddle game defined in `env.py`.
-The training code is `train.py`, which uses Stable-Baselines3 PPO.
-The scoring code is `score.py`, which outputs a `score:` (average episode reward over 50 episodes).
+You are an expert AI researcher. Your goal is to maximize the score of a Reinforcement Learning agent playing a custom 2D paddle game.
 
-Your goal is to maximize the `score`. A perfect episode without missing the ball can range from 1 to 50+ depending on the episode max steps. A baseline agent might score around -1 to 5.
+The `score.py` script returns the average reward over 50 episodes. A baseline agent might score around -1 to 5; your goal is to find configurations that consistently score much higher.
 
-You can modify ONLY:
-1. `env.py` (Reward shaping, observation space scaling, episode length `self.max_steps`)
-2. `train.py` (PPO Hyperparameters: `--lr`, `--net_arch`, `--n_envs` or modify PPO args like `gamma`, `ent_coef` directly in train.py).
+## Workflow
 
-Rules:
-1. Do not change the fundamental action space or core physics.
-2. In `env.py`, focus primarily on tweaking the reward structure (e.g. `reward += ...`) that guides the agent to hit the ball more consistently.
-3. In `train.py`, you can change the default hyperparameters in the `parser.add_argument` definitions or the `PPO(...)` call. Do NOT change the commandline arguments accepted by the file, just their defaults or hardcoded overrides.
-4. Keep training time short. Do not exceed 200,000 timesteps total.
-5. Provide a bash script containing `python train.py` and `python score.py` to evaluate your changes.
+1. **Review Baseline:** Run `uv run python experiment_loop.py` to see the current score from `train.py` and `score.py`.
+2. **Brainstorm Changes:** Consider changes to hyper-parameters or reward functions.
+3. **Implement Changes:** Edit `env.py` (for reward shaping) or `train.py` (for learning rate, network architecture, etc.).
+4. **Evaluate:** Rerun the experiment loop (`uv run python experiment_loop.py`).
+5. **Version Control:**
+    - If the score INCREASES: Run `git commit -am "improved score to X: [brief description of change]"`
+    - If the score DECREASES or the code breaks: Run `git reset --hard HEAD` to revert your changes.
+6. **Iterate:** Repeat this process until you achieve a consistently high score or exhaust reasonable ideas.
 
-Example changes:
-- In `env.py`: Add a reward proportional to `abs(self.paddle_y - self.ball_y)` to encourage alignment.
-- In `train.py`: Set `--lr 1e-3` or `--net_arch 128 128`.
+## Search Space
 
-Start your process by running your baseline and interpreting the score.
+You may modify the following:
+
+- **Environment (`env.py`):**
+    - **Reward Shaping:** Add auxiliary rewards (e.g., `reward += 0.01 * (1.0 - abs(self.paddle_y - self.ball_y))`) to guide the agent.
+    - **Episode Length:** Modify `self.max_steps`.
+    - Do NOT change the state vector size, action space, or core physics.
+
+- **Training (`train.py`):**
+    - **Learning Rate (`--lr`):** Try values like `1e-3`, `3e-4`, `5e-4`.
+    - **Network Architecture (`--net_arch`):** Try wider or deeper networks (e.g., `[128, 128]`, `[64, 64, 64]`).
+    - **Timesteps (`--timesteps`):** You may increase up to a maximum of 200,000 if the agent needs more time to converge.
+
+Do not edit `score.py` or `experiment_loop.py` unless absolutely necessary to fix a bug. Your job is exclusively to optimize the agent and environment interaction.

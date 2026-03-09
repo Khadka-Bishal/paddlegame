@@ -107,9 +107,10 @@ class PaddleEnv(gym.Env):
                 reward = -1.0
                 terminated = True
                 
-        # Optional: very small shaped reward for keeping paddle aligned with ball y (helps early learning)
+        # Better shaped reward for keeping paddle aligned with ball y
+        # We give a positive reward when aligned, negative when far away
         y_dist = abs(self.paddle_y - self.ball_y)
-        reward += 0.001 * (1.0 - y_dist)
+        reward += 0.05 * (0.5 - y_dist)
         
         if self.current_step >= self.max_steps:
             truncated = True
