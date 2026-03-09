@@ -9,7 +9,7 @@ def main():
     parser.add_argument("--timesteps", type=int, default=50_000, help="Total timesteps to train")
     parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
     parser.add_argument("--n_envs", type=int, default=1, help="Number of parallel environments")
-    parser.add_argument("--net_arch", type=int, nargs="+", default=[64, 64], help="Network architecture layers")
+    parser.add_argument("--net_arch", type=int, nargs="+", default=[128, 128], help="Network architecture layers")
     parser.add_argument("--device", type=str, default="auto", help="Device to use (cpu, cuda, mps, auto)")
     args = parser.parse_args()
 
