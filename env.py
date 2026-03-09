@@ -122,6 +122,49 @@ class PaddleEnv(gym.Env):
         return self._get_obs(), reward, terminated, truncated, {}
 
     def render(self):
-        # We skip rendering for the headless fast CPU training loop, 
-        # but could implement basic print/pygame here if needed
-        pass
+        if self.render_mode != "human":
+            return
+            
+        try:
+            import pygame
+        except ImportError:
+            print("Please install pygame to render: pip install pygame")
+            return
+            
+        if not hasattr(self, 'screen'):
+            pygame.init()
+            self.screen = pygame.display.set_mode((400, 400))
+            pygame.display.set_caption("Paddle Game RL")
+            self.clock = pygame.time.Clock()
+            
+        # Draw background
+        self.screen.fill((0, 0, 0))
+        
+        # Convert coords from [-1, 1] to [0, 400]
+        def to_px(x, y):
+            return int((x + 1.0) / 2.0 * 400), int((y + 1.0) / 2.0 * 400)
+            
+        # Draw ball
+        bx, by = to_px(self.ball_x, self.ball_y)
+        pygame.draw.circle(self.screen, (255, 255, 255), (bx, by), 5)
+        
+        # Draw paddle
+        px_x, px_y_center = to_px(self.paddle_x, self.paddle_y)
+        _, px_h = to_px(-1.0, -1.0 + self.paddle_height)
+        
+        paddle_rect = pygame.Rect(
+            px_x - 5, 
+            px_y_center - px_h // 2, 
+            10, 
+            px_h
+        )
+        pygame.draw.rect(self.screen, (255, 255, 255), paddle_rect)
+        
+        pygame.display.flip()
+        self.clock.tick(60) # 60 FPS
+        
+        # Handle quit event to avoid unresponsiveness
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
